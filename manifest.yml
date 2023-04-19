@@ -1,0 +1,12 @@
+applications:
+  - name: training
+    random-route: true
+    memory: 712M
+    buildpacks:
+      - nodejs_buildpack
+    health-check-type: process
+    disk_quota: 1028M
+    command: npm run start:prod
+    path: .
+    services:
+      - wdcredstore
