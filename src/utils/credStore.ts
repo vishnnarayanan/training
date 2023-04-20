@@ -1,5 +1,5 @@
-import fetch from 'node-fetch';
-import jose from 'node-jose';
+const jose = require('node-jose');
+const fetch = require('node-fetch');
 
 async function decryptPayload(privateKey, payload) {
   const key = await jose.JWK.asKey(
@@ -17,14 +17,17 @@ async function fetchAndDecrypt(privateKey, url, method, headers, body) {
     // .then(checkStatus)
     .then((response) => response.text())
     .then((payload) => decryptPayload(privateKey, payload))
-    .then(JSON.parse);
+    .then(JSON.parse)
+    .catch((error) => {
+      console.log(error);
+    });
   return result;
 }
 
 export async function fetchKey() {
   const credential = {
     name: 'wdcredstore',
-    value: 'credValue',
+    value: 'SAP_URL',
     username:
       'de59bcd6-ae60-499a-857f-3df12df6fa47.0.iCG+huIMVr7P8xX5MNE9wfkucsykIRtVCXNuwvPNUP0=',
   };
@@ -35,7 +38,7 @@ export async function fetchKey() {
   fetchAndDecrypt(
     privateKey,
     credURL,
-    'POST',
+    'post',
     {
       'Content-Type': 'application/jose',
     },
